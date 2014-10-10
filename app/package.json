@@ -1,0 +1,16 @@
+{
+  "name": "Filestalker",
+  "main": "views/index.html",
+  "version": "0.0.1",
+  "single-instance": true,
+  "window": {
+    "title": "FileStalker",
+    "width": 1200,
+    "height": 720,
+    "min_width": 900,
+    "min_height": 630,
+    "toolbar": true,
+    "icon": "img/FS.png"
+  },
+  "chromium-args": "--child-clean-exit"
+}

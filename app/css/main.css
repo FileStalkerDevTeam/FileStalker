@@ -1,0 +1,620 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+body {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
+
+#loadingpane.hidden {
+	display: none;
+}
+
+#loadingpane {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	z-index: 100;
+	background: rgba(0,0,0,0.9);
+	-webkit-perspective: 1000;
+	-webkit-perspective-origin: 50% 280px;
+}
+
+#loadingpane #loading {
+	width: 200px;
+	color: #ffffff;
+	font-family: Roboto;
+	font-weight: lighter;
+	font-size: 3em;
+	position: absolute;
+	left: calc((100%/2) - 80px);
+	bottom: 200px;
+	-webkit-animation: loadingGlow 3s infinite;
+}
+
+@-webkit-keyframes loadingGlow {
+	0% {
+		text-shadow: none;
+		opacity: 1;
+	}
+	50% {
+		text-shadow: 1px 1px 15px rgba(255,255,255,0.9);
+		opacity: 0.7;
+	}
+	100% {
+		text-shadow: none;
+		opacity: 1;
+	}
+}
+
+#loadingpane #grid {
+	position: relative;
+}
+
+#loadingpane #grid .gridcell {
+	position: absolute;
+	border: 1px solid white;
+	background: white;
+	-webkit-transform-style: preserve-3d;
+}
+
+#loadingpane #grid .gridcell.hidden {
+	opacity: 0;
+}
+
+#loadingpane #grid .gridcell.zoom-in-out {
+	-webkit-animation-name: zoom-in-out;
+}
+
+#loadingpane #grid .gridcell.zoom-out-out {
+	-webkit-animation-name: zoom-out-out;
+}
+
+#loadingpane #grid .gridcell.zoom-out-in {
+	-webkit-animation-name: zoom-out-in;
+}
+
+#loadingpane #grid .gridcell.zoom-in-in {
+	-webkit-animation-name: zoom-in-in;
+}
+
+@-webkit-keyframes zoom-in-out {
+	100% {
+		-webkit-transform: translateZ(250px);
+		opacity: 0;
+	}
+}
+
+@-webkit-keyframes zoom-out-out {
+	100% {
+		-webkit-transform: translateZ(-250px);
+		opacity: 0;
+	}
+}
+
+@-webkit-keyframes zoom-out-in {
+	0% {
+		-webkit-transform: translateZ(250px);
+		opacity: 0;
+	}
+	100% {
+		-webkit-transform: translateZ(0);
+		opacity: 1;
+	}
+}
+
+@-webkit-keyframes zoom-in-in {
+	0% {
+		-webkit-transform: translateZ(-250px);
+		opacity: 0;
+	}
+	100% {
+		-webkit-transform: translateZ(0);
+		opacity: 1;
+	}
+}
+
+#body {
+	width: 100%;
+	height: 100%;
+	background: #edf5ea;
+	position: relative;
+	top: 0;
+	left: 0;
+}
+
+#main {
+	min-width: 900px;
+	height: 100%;
+	margin: 0 auto;
+	position: relative;
+	overflow: hidden;
+}
+
+.title .name1 {
+	font-family: Roboto;
+	font-size: 3.5em;
+	font-weight: lighter;
+}
+
+.title .name2 {
+	font-family: Roboto;
+	font-size: 1.5em;
+}
+
+.title .name2 .name2a {
+	font-family: Quicksand;
+	font-size: 1em;
+	color: #9b0000;
+}
+
+#login {
+	width: 100%;
+	height: 100%;
+	z-index: 10;
+	position: relative;
+}
+
+#login #loginlabel {
+	width: 400px;
+	height: 400px;
+	padding: 10px;
+	position: relative;
+	top: calc((100% - 400px) /2);
+	left: calc((50% - 430px));
+}
+
+#login #loginlabel > *, #login #loginlabel .title > * {
+	float: right;
+}
+
+#login #loginlabel .logo {
+	margin-bottom: 60px;
+}
+
+#login #loginform {
+	width: 350px;
+	height: 400px;
+	position: absolute;
+	top: calc((100% - 400px) /2);
+	left: 50%;
+	padding: 20px 10px;
+	background: #2b2b2b;
+	color: #ffffff;
+	margin-top: 10px;
+	border-radius: 5px;
+}
+
+#login #loginform #logintext {
+	font-family: Roboto;
+	font-size: 1.5em;
+	font-weight: bold;
+	text-align: center;
+}
+
+#login #loginform form {
+	width: 250px;
+	height: 200px;
+	margin: 0 auto;
+}
+
+#login #loginform input {
+	width: 100%;
+	height: 40px;
+	font-size: 1.3em;
+	font-family: Roboto;
+	font-weight: bold;
+	padding-left: 8px;
+	margin: 0 auto;
+	margin-top: 10px;
+}
+
+#login #loginform input#uname {
+	margin-top: 50px;
+}
+
+#login #loginform button {
+	width: 250px;
+	height: 40px;
+	background: #ab0000;
+	font-size: 1.3em;
+	font-family: Roboto;
+	font-weight: bold;
+	border-radius: 5px;
+	cursor: pointer;
+	border: none;
+	position: relative;
+	left: calc((100% - 250px) /2);
+	color: #ffffff;
+}
+
+#login #loginform button:hover {
+	background: #cb0000;
+}
+
+#login #loginform #loginnotif {
+	font-family: Roboto;
+	font-size: 1em;
+	font-weight: bold;
+	text-align: center;
+	color: red;
+	margin-top: 30px;
+}
+
+#app {
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+#home {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	display: none;
+}
+
+.logged-in #login {
+	display: none;
+}
+
+.logged-in #home {
+	display: block;
+}
+
+#home #frontflap {
+	width: 96%;
+	height: calc(100% - 70px);
+	position: absolute;
+	top: 0;
+	left: 2%;
+	background: #edf5ea;
+	-webkit-transition: top 0.1s;
+}
+
+#home #frontflap.open {
+	top: -80%;
+}
+
+#home #frontflap #homelabel {
+	width: 100%;
+	height: 130px;
+	position: relative;
+}
+
+#home #frontflap #homelabel .title {
+	width: 300px;
+	height: 100px;
+	position: absolute;
+	top: 50px;
+	left: 80px;
+}
+
+#homelabel .title .name1 {
+	font-size: 2.5em;
+}
+
+#homelabel .title .name2 {
+	font-size: 1.25em;
+	font-weight: bold;
+}
+
+#homelabel .title .name2 .name2a {
+	font-size: 1em;
+	font-weight: normal;
+}
+
+#home #frontflap #homelabel #userinfo {
+	width: 400px;
+	height: 48px;
+	position: absolute;
+	top: 50px;
+	right: 80px;
+}
+
+#userinfo .username {
+	font-family: Roboto;
+	font-size: 1.5em;
+	line-height: 50px;
+	font-weight: bold;
+}
+
+#userinfo > .username {
+	margin-right: 15px;
+	float: right;
+}
+
+#userinfo #usermenu {
+	width: 45px;
+	height: 45px;
+	float: right;
+	padding: 3px;
+	cursor: pointer;
+	font-size: 1.4em;
+	line-height: 39px;
+	text-align: center;
+	border-radius: 50%;
+	background: #2b2b2b;
+	color: #edf5ea;
+}
+
+#userinfo #userdrop {
+	display: none;
+	position: absolute;
+	z-index: 20;
+	right: 0;
+}
+
+#userinfo #userdrop.show {
+	display: block;
+}
+
+
+#userinfo #userdrop #dropwrapper {
+	position: relative;
+	margin-top: 60px;
+	padding: 5px;
+	background: #1a1a1a;
+	border-radius: 2px;
+}
+
+#userinfo #userdrop #dropwrapper::after {
+	content:'';
+	width: 0;
+	height: 0;
+	border: solid transparent;
+	border-width: 16px;
+	border-bottom-color: #1a1a1a;
+	position: absolute;
+	top: -32px;
+	right: 5px;
+}
+
+#dropwrapper li {
+	list-style: none;
+	width: 250px;
+	height: 40px;
+	font-family: Roboto;
+	font-size: 1em;
+	font-weight: bold;
+	line-height: 40px;
+	background: #edf5ea;
+	padding: 0 10px;
+}
+
+#dropwrapper li:not(#account) {
+	cursor: pointer;
+}
+
+#dropwrapper li:not(#account):hover {
+	background: rgb(255,42,42);
+	color: #ffffff;
+}
+
+#dropwrapper li div:not(.icon) {
+	float: left;
+}
+
+#dropwrapper li .icon {
+	float: right;
+	font-size: 1em;
+	line-height: 40px;
+}
+
+#dropwrapper li#account {
+	height: 260px;
+	border-bottom: 1px solid rgba(0,0,0,0.5);
+	position: relative;
+}
+
+#dropwrapper li#account #userpic {
+	width: 100%;
+	height: 210px;
+	position: relative;
+}
+
+#dropwrapper li#account #userpic img{
+	width: 180px;
+	height: 180px;
+	position: relative;
+	left: calc((100% - 180px) /2);
+	top: 20px;
+}
+
+#dropwrapper li#account > .username {
+	width: 100%;
+	height: 40px;
+	line-height: 1.5em;
+	text-align: center;
+}
+
+#home #frontflap #homemenu {
+	width: 100px;
+	height: 100px;
+	display: block;
+	position: absolute;
+	font-size: 2em;
+	line-height: 100px;
+	text-align: center;
+	bottom: -50px;
+	right: 0;
+	border-radius: 50%;
+	background: #edf5ea;
+	cursor: pointer;
+}
+
+#home #frontflap #homemenu:hover, #home #frontflap.open #homemenu {
+	color: red;
+	font-weight: bold;
+}
+
+#home #frontflap #nav {
+	max-width: 1000px;
+	width: 100%;
+	margin: 0 auto;
+	height: calc(100% - 120px);
+	padding: 0 50px 30px 50px;
+}
+
+#home #frontflap #nav > div {
+	width: calc(100% / 3);
+	height: 100%;
+	float: left;
+	position: relative;
+}
+
+#home #frontflap #nav .navwrapper {
+	width: 80%;
+	height: 80%;
+	position: relative;
+	top: 10%;
+	left: 10%;
+}
+
+#nav .navwrapper .navbutton {
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+	position: relative;
+	top: 25px;
+	left: calc((100% - 150px) /2);
+	-webkit-transition: all 0.1s;
+	font-size: 3.5em;
+	color: #ececec;
+	text-align: center;
+	padding-top: 45px;
+	cursor: pointer;
+}
+
+#nav .navwrapper .navbutton:hover {
+	width: 200px;
+	height: 200px;
+	top: 0px;
+	left: calc((100% - 200px) /2);
+	font-size: 5em;
+	padding-top: 55px;
+}
+
+#nav .navwrapper .navtitle {
+	width: 100%;
+	font-family: Roboto;
+	font-size: 2.5em;
+	position: absolute;
+	bottom: 15%;
+	text-align: center;
+}
+
+#nav #regpane #regbutton {
+	background: rgb(56,231,56);
+}
+
+#nav #recpane #recbutton {
+	background: rgb(255,42,42);
+}
+
+#nav #srcpane #srcbutton {
+	background: rgb(83,167,240);
+}
+
+#home #backflap {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: #1a1a1a;
+	background-image: url(../img/bg.jpg);
+}
+
+#pageoverlay {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: rgba(0,0,0,0.9);
+	display: none;
+}
+
+.page {
+	width: 100%;
+	height: 100%;
+	min-width: 800px;
+	min-height: 570px;
+	position: absolute;
+	top: 0;
+	padding: 3% 5%;
+	left: 100%;
+	-webkit-transition: left 0.1s;
+}
+
+.page.open-page {
+	left: 0;
+}
+
+.page .displaypane {
+	width: 100%;
+	height: 100%;
+	border: 1px solid black;
+	border: none;
+	position: relative;
+}
+
+.page .displaypane .scanfirst {
+	position: absolute;
+	width: 100%;
+	height: 98%;
+	top: 0;
+	background: #edf5ea;
+}
+
+.page .displaypane .scanfirst .text {
+	font-family: Roboto;
+	font-size: 2.5em;
+	width: 600px;
+	text-align: justify;
+	margin: 10% auto;
+}
+
+.page .displaypane .scanfirst .testscanner {
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
+}
+
+.page .displaypane .displaypane2 {
+	width: 100%;
+	height: 98%;
+	background: #edf5ea;
+	bottom: 0;
+}
+
+.page .displaypane .displaypane2 .closebutton {
+	font-size: 1.8em;
+	color: #6b6b6b;
+	position: absolute;
+	right: 0;
+	top: 0;
+	cursor: pointer;
+}
+
+.page .displaypane .displaypane2 .closebutton:hover {
+	color: #000000;
+}
+
+#regpage .displaypane {
+	background: rgb(56,231,56);
+}
+
+#recpage .displaypane {
+	background: rgb(255,42,42);
+}
+
+#srcpage .displaypane {
+	background: rgb(83,167,240);
+}

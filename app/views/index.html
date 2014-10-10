@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>FileStalker</title>
+		<link rel="stylesheet" type="text/css" href="../css/main.css" />
+		<link rel="stylesheet" type="text/css" href="../css/font.css" />
+		<script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
+	</head>
+	<body>
+		<div id="loadingpane" class="hidden">
+			<div id="loading">Loading...</div>
+		</div>
+		<div id="body">
+			<div id="main">
+				<div id="login">
+					<div id="loginlabel">
+						<div class="logo">
+							<img src="../img/fs_logo.png" />
+						</div>
+						<div class="title">
+							<div class="name1">File Stalker</div>
+							<div class="name2"><span class="name2a">OSA</span> Document Tracking System</div>
+						</div>
+					</div>
+					<div id="loginform">
+						<div id="logintext">Start stalking?</div>
+						<form>
+							<input type="text" id="uname" name="uname" placeholder="Username" />
+							<input type="password" id="pword" name="pword" placeholder="Password "/>
+						</form>
+						<button>Let's go!!!</button>
+						<div id="loginnotif"></div>
+					</div>
+					
+				</div>
+				<div id="app">
+					<div id="home">
+						<div id="backflap">
+							<!-- <ul id="backtabs">
+								<li class="tab">
+									<div class="tablink">My Profile</div> -->
+									<div class="tabcontent">
+
+									</div>
+								<!-- </li>
+								<li class="tabcontent">
+									<div class="tablink">Manual</div>
+									<div class="tabcontent">
+
+									</div>
+								</li>
+							</ul> -->
+						</div>
+						<div id="frontflap">
+							<div id="homelabel">
+								<div class="title">
+									<div class="name1">File Stalker</div>
+									<div class="name2"><span class="name2a">OSA</span> Document Tracking System</div>
+								</div>
+								<div id="userinfo">
+									<div id="usermenu" class="i-profile"></div>
+									<div class="username"></div>
+									<div id="userdrop">
+										<ul id="dropwrapper">
+											<li id="account">
+												<div id="userpic"><img src="" alt="User Profile Picture"/></div>
+												<div class="username"></div>
+											</li>
+											<li id="notiflink"><div>Notifications</div><div class="icon i-notif"></div></li>
+											<li id="mydoclink"><div>My Profile</div><div class="icon i-mydoc"></div></li>
+											<li id="logoutlink"><div>Logout</div><div class="icon i-logout"></div></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div id="nav">
+								<div id="regpane">
+									<div class="navwrapper">
+										<div id="regbutton" class="navbutton i-register" data-target="regpage"></div>
+										<div id="regtitle" class="navtitle">Register</div>
+									</div>
+								</div>
+								<div id="recpane">
+									<div class="navwrapper">
+										<div id="recbutton" class="navbutton i-receive" data-target="recpage"></div>
+										<div id="rectitle" class="navtitle">Receive</div>
+									</div>
+								</div>
+								<div id="srcpane">
+									<div class="navwrapper">
+										<div id="srcbutton" class="navbutton i-search" data-target="srcpage"></div>
+										<div id="srctitle" class="navtitle">Search</div>
+									</div>
+								</div>
+							</div>
+							<div id="homemenu" class="i-menu"></div>
+						</div>
+					</div>
+					<div id="pageoverlay"></div>
+					<div id="regpage" class="page" data-action="register">
+						<div class="displaypane">
+							<div class="scanfirst">
+								<div class="text">Hi there! Before we continue, please scan first the QR code of your document. Thank you!</div>
+								<div class="testscanner">
+									<input type="text" id="regqrcode" class="qrcode" />
+									<button class="scan">Scan</button>
+								</div>
+							</div>
+							<div class="displaypane2">
+								<div class="closebutton i-cross"></div>
+							</div>
+						</div>
+					</div>
+					<div id="recpage" class="page" data-action="receive">
+						<div class="displaypane">
+							<div class="scanfirst">
+								<div class="text">Hi there! Before we continue, please scan first the QR code of your document. Thank you!</div>
+								<div class="testscanner">
+									<input type="text" id="recqrcode" class="qrcode" />
+									<button class="scan">Scan</button>
+								</div>
+							</div>
+							<div class="displaypane2">
+								<div class="closebutton i-cross"></div>
+							</div>
+						</div>
+					</div>
+					<div id="srcpage" class="page" data-action="search">
+						<div class="displaypane">
+							<div class="displaypane2">
+								<div class="closebutton i-cross"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="../js/fsloader.js"></script>
+		<script type="text/javascript" src="../js/fsdbhandler.js"></script>
+		<script type="text/javascript" src="../js/fsmodel.js"></script>
+		<script type="text/javascript" src="../js/index.js"></script>
+	</body>
+</html>
