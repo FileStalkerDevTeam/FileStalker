@@ -1,6 +1,7 @@
 var body = $('body');
 var fsm = new FSModel;
 var fsl = new FSLoader;
+var fsp = new FSPages;
 
 _initializeApp = function() {
 	$('#main').hide();
