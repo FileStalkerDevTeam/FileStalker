@@ -3,7 +3,7 @@
 // will handle all database related transactions
 //  1. creation of database if not available
 //  2. retrieve updated database, then load in local system
-//  3. add row(s) tolocal database
+//  3. add row(s) to local database
 //  4. retrieve or update row(s) from local database
 //  5. send updates to the remote database if possible (20 queries/5 mins)
 

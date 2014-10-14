@@ -18,9 +18,6 @@ _initializeApp = function() {
 };
 
 _initLoginEvents = function(callback) {
-	$('#login #loginform #uname')[0].value = "";
-	$('#login #loginform #pword')[0].value = "";
-
 	if(sessionStorage.getItem('empno') === null) {
 		var loginbutton = $('#login #loginform button'),
 			_evaluateLogin = function(result, success) {
@@ -62,6 +59,7 @@ _initLoginEvents = function(callback) {
 						break;
 					case 3:
 						errornotif.text("Wait, please fill them up first.");
+
 	 					setTimeout(function(){
 							errornotif.fadeOut(1000, function(){
 		 						$(this).text("");
