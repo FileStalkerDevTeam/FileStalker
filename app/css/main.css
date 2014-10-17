@@ -139,16 +139,15 @@ body {
 .title .name1 {
 	font-family: Roboto;
 	font-size: 3.5em;
-	font-weight: lighter;
 }
 
 .title .name2 {
-	font-family: Roboto;
+	font-family: Corbert-Condensed;
 	font-size: 1.5em;
 }
 
 .title .name2 .name2a {
-	font-family: Quicksand;
+	font-family: Geometria;
 	font-size: 1em;
 	color: #9b0000;
 }
@@ -177,6 +176,11 @@ body {
 	margin-bottom: 60px;
 }
 
+#login #loginlabel .logo img {
+	/*border-radius: 5px;*/
+	/*box-shadow: 0 0 10px rgba(0,0,0,0.5);*/
+}
+
 #login #loginform {
 	width: 350px;
 	height: 400px;
@@ -184,16 +188,18 @@ body {
 	top: calc((100% - 400px) /2);
 	left: 50%;
 	padding: 20px 10px;
-	background: #2b2b2b;
-	background-image: url(../img/bg.jpg);
-	color: #ffffff;
+	/*background: #2b2b2b;*/
+	/*background-image: url(../img/bg.jpg);*/
+	/*color: #ffffff;*/
+	color: #000000;
 	margin-top: 10px;
-	border-radius: 5px;
+	/*border-radius: 5px;*/
+	/*box-shadow: 0 0 10px rgba(0,0,0,0.5);*/
 }
 
 #login #loginform #logintext {
-	font-family: Roboto;
-	font-size: 1.5em;
+	font-family: Corbert-Condensed;
+	font-size: 2em;
 	font-weight: bold;
 	text-align: center;
 }
@@ -304,7 +310,6 @@ body {
 
 #homelabel .title .name2 {
 	font-size: 1.25em;
-	font-weight: bold;
 }
 
 #homelabel .title .name2 .name2a {
@@ -553,7 +558,8 @@ body {
 	top: 0;
 	padding: 3% 5%;
 	left: 100%;
-	-webkit-transition: left 0.1s;
+	-webkit-transition: left 0.2s;
+	/*display: none;*/
 }
 
 .page.open-page {
@@ -612,6 +618,74 @@ body {
 
 #regpage .displaypane {
 	background: rgb(56,231,56);
+}
+
+#regpage .displaypane .displaypane2 {
+	
+}
+
+#regpage .displaypane .displaypane2 .afterscan {
+	
+}
+
+#regpage .displaypane .displaypane2 .afterscan .input{
+	
+}
+
+#regpage .input .title {
+
+}
+
+#regpage .input .content {
+
+}
+
+#regpage .input .content .trackingno {
+
+}
+
+#regpage .input .content .trackingno .input {
+
+}
+
+#regpage .input .content form {
+
+}
+
+#regpage .input form label[for='subject'] {
+
+}
+
+#regpage .input form #subject {
+
+}
+
+#regpage .input form label[for='desc'] {
+
+}
+
+#regpage .input form #desc {
+	
+}
+
+#regpage .input form label[for='type'] {
+
+}
+
+#regpage .input form #type {
+	
+}
+
+#regpage .input form label[for='office'] {
+
+}
+
+#regpage .input form #office {
+	
+}
+
+#regpage .input .content .submit-button {
+	
 }
 
 #recpage .displaypane {

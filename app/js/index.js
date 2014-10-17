@@ -55,7 +55,7 @@ _initLoginEvents = function(callback) {
 		 						$(this).css('display','block');
 		 					});
 						}, 3000);
-	 					$('#login #loginform #pword')[0].value = "";
+						$('#login #loginform #pword')[0].value = "";
 						break;
 					case 3:
 						errornotif.text("Wait, please fill them up first.");
@@ -117,7 +117,10 @@ _initPageEvents = function(callback) {
 	$.each(homeButtons, function(button){
 		$(this).on('click', function(){
 			var target = $(this).data('target');
-			$('#pageoverlay').fadeIn(100);
+			$('#pageoverlay').fadeIn(200);
+			// $('#'+target).show(10, function(){
+			// 	$(this).addClass('open-page');
+			// });
 			$('#'+target).addClass('open-page');
 		}).on('mouseenter', function(){
 			var color = $(this).css('background-color');
@@ -133,7 +136,7 @@ _initPageEvents = function(callback) {
 	$.each(pageCloseButtons, function(button){
 		$(this).on('click', function(){
 			var target = $(this).parents('.page');
-			$('#pageoverlay').fadeOut(100);
+			$('#pageoverlay').fadeOut(200);
 			target.removeClass('open-page');
 			_reset('regrecpage');
 		});
@@ -172,13 +175,13 @@ _updateHomePage = function() {
 };
 
 _verifyQRCode = function(code, action) {
-	var _evaluateQRCode = function(code, action, result, success) {
+	var self = this,
+		_evaluateQRCode = function(code, action, result, success) {
 		if(action == "register") {
 			if(result == 0) {
 				console.log('Register');
 				console.log('Scan document successful');
-				/*update values for displaypane2*/
-				$('#regpage .scanfirst').fadeOut();
+				self._showRegister(code);
 				console.log(success);
 			}
 			else if(result == 1) {
@@ -206,6 +209,22 @@ _verifyQRCode = function(code, action) {
 
 	fsl.showLoader();
 	fsm._verifyQRCode(code, action, _evaluateQRCode);
+};
+
+_showRegister = function(code) {
+	var self = this,
+		_updateRegisterPage = function(offices, params) {
+			var code = params.code;
+			var afterscan = $('#regpage .displaypane2 .afterscan .input');
+			var page = fsp.register(code, offices);
+			afterscan.html(page);
+			$('#regpage .scanfirst').fadeOut();
+		};
+
+	var params = {
+		code : code
+	};
+	fsm._getUserOffices(sessionStorage.getItem('empno'), _updateRegisterPage, params)
 };
 
 _reset = function(target) {

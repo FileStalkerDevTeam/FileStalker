@@ -167,5 +167,17 @@ FSModel.prototype = {
 					}
 				}
 			}, null);
+	},
+	_getUserOffices : function(empno, callback, parameters) {
+		var dbh = this.defines.dbh;
+
+		dbh.prepAndExecSql(null, "SELECT office FROM staff_offices WHERE empno='"+empno+"'", [],
+			function(success,params,x){
+				var offices = [];
+				$.each(success.rows, function(i, o){
+					offices.push(o.office);
+				});
+				callback(offices, parameters);
+			}, null);
 	}
 };

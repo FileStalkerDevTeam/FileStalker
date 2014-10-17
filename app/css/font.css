@@ -43,15 +43,85 @@
 }
 
 @font-face {
+	font-family: 'Geometria';
+	src:url('../font/Geometria/Geometria-Light.eot');
+	src:url('../font/Geometria/Geometria-Light.eot?#iefix') format('embedded-opentype'),
+		url('../font/Geometria/Geometria-Light.woff2') format('woff2'),
+		url('../font/Geometria/Geometria-Light.woff') format('woff'),
+		url('../font/Geometria/Geometria-Light.ttf') format('truetype'),
+		url('../font/Geometria/Geometria-Light.svg#geometria_lightlight') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Corbert';
+	src:url('../font/Corbert/Corbert-Regular.eot');
+	src:url('../font/Corbert/Corbert-Regular.eot?#iefix') format('embedded-opentype'),
+		url('../font/Corbert/Corbert-Regular.woff2') format('woff2'),
+		url('../font/Corbert/Corbert-Regular.woff') format('woff'),
+		url('../font/Corbert/Corbert-Regular.ttf') format('truetype'),
+		url('../font/Corbert/Corbert-Regular.svg#corbertregular') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+ 	font-family: 'Corbert-Condensed';
+ 	src:url('../font/Corbert/CorbertCondensed-Regular.eot');
+ 	src:url('../font/Corbert/CorbertCondensed-Regular.eot?#iefix') format('embedded-opentype'),
+ 		url('../font/Corbert/CorbertCondensed-Regular.woff2') format('woff2'),
+ 		url('../font/Corbert/CorbertCondensed-Regular.woff') format('woff'),
+ 		url('../font/Corbert/CorbertCondensed-Regular.ttf') format('truetype'),
+ 		url('../font/Corbert/CorbertCondensed-Regular.svg#corbert_condensedregular') format('svg');
+ 	font-weight: normal;
+ 	font-style: normal;
+}
+
+@font-face {
 	font-family: 'FSIcon';
-	src:url('../font/FSIcon/FSFonts.eot?-uno589');
-	src:url('../font/FSIcon/FSFonts.eot?#iefix-uno589') format('embedded-opentype'),
-		url('../font/FSIcon/FSFonts.woff?-uno589') format('woff'),
-		url('../font/FSIcon/FSFonts.ttf?-uno589') format('truetype'),
-		url('../font/FSIcon/FSFonts.svg?-uno589#FSFonts') format('svg');
+	src:url('../font/FSIcon/FSIcon.eot?-uno589');
+	src:url('../font/FSIcon/FSIcon.eot?#iefix-uno589') format('embedded-opentype'),
+		url('../font/FSIcon/FSIcon.woff?-uno589') format('woff'),
+		url('../font/FSIcon/FSIcon.ttf?-uno589') format('truetype'),
+		url('../font/FSIcon/FSIcon.svg?-uno589#FSFonts') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
 
 [class^="i-"], [class*=" i-"] { font-family: 'FSIcon'; speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; line-height: 1; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-.i-track:before { content: "\e000"; } .i-logout:before { content: "\e001"; } .i-login:before { content: "\e002"; } .i-setting:before { content: "\e003"; } .i-stack:before { content: "\e004"; } .i-search:before { content: "\e005"; } .i-closebox:before { content: "\e006"; } .i-tofirst:before { content: "\e007"; } .i-prev:before { content: "\e008"; } .i-next:before { content: "\e009"; } .i-toend:before { content: "\e00a"; } .i-profile:before { content: "\e00b"; } .i-notif:before { content: "\e00c"; } .i-mydoc:before { content: "\e00d"; } .i-back:before { content: "\e00e"; } .i-forward:before { content: "\e00f"; } .i-up:before { content: "\e010"; } .i-down:before { content: "\e011"; } .i-cross:before { content: "\e012"; } .i-menu:before { content: "\e013"; } .i-receive:before { content: "\e014"; } .i-register:before { content: "\e015"; } 
+.i-track:before { content: "\e600"; }
+.i-attach:before { content: "\e601"; }
+.i-logout:before { content: "\e602"; }
+.i-login:before { content: "\e603"; }
+.i-ribbon:before { content: "\e604"; }
+.i-clock:before { content: "\e605"; }
+.i-setting:before { content: "\e606"; }
+.i-menu:before { content: "\e607"; }
+.i-stack:before { content: "\e608"; }
+.i-search:before { content: "\e609"; }
+.i-squarecross:before { content: "\e60a"; }
+.i-tofirst:before { content: "\e60b"; }
+.i-prev:before { content: "\e60c"; }
+.i-next:before { content: "\e60d"; }
+.i-toend:before { content: "\e60e"; }
+.i-folder:before { content: "\e60f"; }
+.i-upload:before { content: "\e610"; }
+.i-download:before { content: "\e611"; }
+.i-profile:before { content: "\e612"; }
+.i-notif:before { content: "\e613"; }
+.i-mydoc:before { content: "\e614"; }
+.i-tag:before { content: "\e615"; }
+.i-star:before { content: "\e616"; }
+.i-left:before { content: "\e617"; }
+.i-right:before { content: "\e618"; }
+.i-up:before { content: "\e619"; }
+.i-down:before { content: "\e61a"; }
+.i-grid:before { content: "\e61b"; }
+.i-error:before { content: "\e61c"; }
+.i-minus:before { content: "\e61d"; }
+.i-check:before { content: "\e61e"; }
+.i-close:before { content: "\e61f"; }
+.i-receive:before { content: "\e620"; }
+.i-register:before { content: "\e621"; }
+.i-ellipsis:before { content: "\e622"; }
