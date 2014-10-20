@@ -11,6 +11,11 @@
 		<div id="loadingpane" class="hidden">
 			<div id="loading">Loading...</div>
 		</div>
+		<div id="pageoverlay"></div>
+		<div id="message">
+			<div class="icon i-close" data-target="message"></div>
+			<div class="text"></div>
+		</div>
 		<div id="body">
 			<div id="main">
 				<div id="login">
@@ -32,25 +37,10 @@
 						<button>Start stalking!</button>
 						<div id="loginnotif"></div>
 					</div>
-					
 				</div>
 				<div id="app">
 					<div id="home">
 						<div id="backflap">
-							<!-- <ul id="backtabs">
-								<li class="tab">
-									<div class="tablink">My Profile</div> -->
-									<div class="tabcontent">
-
-									</div>
-								<!-- </li>
-								<li class="tabcontent">
-									<div class="tablink">Manual</div>
-									<div class="tabcontent">
-
-									</div>
-								</li>
-							</ul> -->
 						</div>
 						<div id="frontflap">
 							<div id="homelabel">
@@ -77,19 +67,19 @@
 							<div id="nav">
 								<div id="regpane">
 									<div class="navwrapper">
-										<div id="regbutton" class="navbutton i-register" data-target="regpage"></div>
+										<div id="regbutton" class="navbutton i-register" data-target="register"></div>
 										<div id="regtitle" class="navtitle">Register</div>
 									</div>
 								</div>
 								<div id="recpane">
 									<div class="navwrapper">
-										<div id="recbutton" class="navbutton i-receive" data-target="recpage"></div>
+										<div id="recbutton" class="navbutton i-receive" data-target="receive"></div>
 										<div id="rectitle" class="navtitle">Receive</div>
 									</div>
 								</div>
 								<div id="srcpane">
 									<div class="navwrapper">
-										<div id="srcbutton" class="navbutton i-search" data-target="srcpage"></div>
+										<div id="srcbutton" class="navbutton i-search" data-target="search"></div>
 										<div id="srctitle" class="navtitle">Search</div>
 									</div>
 								</div>
@@ -97,43 +87,32 @@
 							<div id="homemenu" class="i-menu"></div>
 						</div>
 					</div>
-					<div id="pageoverlay"></div>
-					<div id="regpage" class="page" data-action="register">
+					<div id="registerpage" class="page" data-action="register">
 						<div class="displaypane">
-							<div class="scanfirst">
-								<div class="text">Hi there! Before we continue, please scan first the QR code of your document. Thank you!</div>
-								<div class="testscanner">
-									<input type="text" id="regqrcode" class="qrcode" />
-									<button class="scan">Scan</button>
-								</div>
+							<div class="iconwrapper">
+								<div class="icon i-register"></div>
 							</div>
 							<div class="displaypane2">
-								<div class="closebutton i-close"></div>
-								<div class="afterscan">
-									<div class="input"></div>
-								</div>
+								<div class="input"></div>
 							</div>
+							<div class="closebutton i-close" data-target="regpage"></div>
 						</div>
 					</div>
-					<div id="recpage" class="page" data-action="receive">
+					<div id="receivepage" class="page" data-action="receive">
 						<div class="displaypane">
-							<div class="scanfirst">
-								<div class="text">Hi there! Before we continue, please scan first the QR code of your document. Thank you!</div>
-								<div class="testscanner">
-									<input type="text" id="recqrcode" class="qrcode" />
-									<button class="scan">Scan</button>
-								</div>
+							<div class="iconwrapper">
+								<div class="icon i-receive"></div>
 							</div>
-							<div class="afterscan"></div>
 							<div class="displaypane2">
-								<div class="closebutton i-close"></div>
+								<div class="input"></div>
 							</div>
+							<div class="closebutton i-close" data-target="recpage"></div>
 						</div>
 					</div>
-					<div id="srcpage" class="page" data-action="search">
+					<div id="searchpage" class="page" data-action="search">
 						<div class="displaypane">
 							<div class="displaypane2">
-								<div class="closebutton i-close"></div>
+								<div class="closebutton i-close" data-target="srcpage"></div>
 							</div>
 						</div>
 					</div>

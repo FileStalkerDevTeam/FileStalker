@@ -33,7 +33,7 @@ FSModel.prototype = {
  			};
 
  			$.each(tables, function(name, value){
- 				console.log("creating table "+name);
+ 				// console.log("creating table "+name);
  				dbh.prepAndExecSql(x, value, [],
  					function(success, params, x){
  						if(self._updateLogs(name, x)){ self._updateTable(name, update_log[name], x); };
@@ -48,17 +48,17 @@ FSModel.prototype = {
  		if(name !== 'queue') {
 			dbh.prepAndExecSql(x, "SELECT lastUpdated FROM "+name+" ORDER BY lastUpdated DESC LIMIT 1", [],
 				function(success, params, x){
-					console.log(name);
-					console.log(success);
+					// console.log(name);
+					// console.log(success);
 					if(success.rows.length !== 0) {
-						console.log("select success");
+						// console.log("select success");
 						update_log[name] = success.rows[0]["lastUpdated"];
-						console.log(update_log[name]);
+						// console.log(update_log[name]);
 					}
 					else {
-						console.log("select failed");
+						// console.log("select failed");
 						update_log[name] = '0000-00-00 00:00:00';
-						console.log(update_log[name]);
+						// console.log(update_log[name]);
 					}	 							
 				}, null);
 			return 1;
@@ -71,22 +71,22 @@ FSModel.prototype = {
 	 	lastUpdated = (lastUpdated === undefined)? '0000-00-00 00:00:00' : lastUpdated;
 	 	var inserts = [];
 	 	var _insertInto = function(inserts, sql){
-	 		console.log(inserts);
-	 		console.log(sql);
+	 		// console.log(inserts);
+	 		// console.log(sql);
 
  			var insertIds = [];
-			console.log("insert to: "+tableName);
-			console.log("values: ");
-			console.log(inserts);
-			console.log("sql: ");
-			console.log(sql);
+			// console.log("insert to: "+tableName);
+			// console.log("values: ");
+			// console.log(inserts);
+			// console.log("sql: ");
+			// console.log(sql);
 
 			$.each(inserts, function(i, insert){
 				dbh.prepAndExecSql(null, sql, insert,
 					function(succ, params, x){
-						console.log("insert: ");
-						console.log(insert);
-						console.log(typeof inserts);
+						// console.log("insert: ");
+						// console.log(insert);
+						// console.log(typeof inserts);
 						insertIds.push(succ.insertId);
 						self._updateLogs(tableName, x);
 					}, null);
@@ -179,5 +179,66 @@ FSModel.prototype = {
 				});
 				callback(offices, parameters);
 			}, null);
+	},
+	_insertToDatabase : function(action, data, callback) {
+		var dbh = this.defines.dbh;
+
+		var empno = sessionStorage.getItem('empno'),
+			d = new Date(),
+			year = d.getFullYear(),
+			month = ((d.getMonth()+1).toString().length === 1)? "0"+(d.getMonth()+1) : (d.getMonth()+1),
+			date = (d.getDate().toString().length === 1)? "0"+d.getDate() : d.getDate(),
+			hour = (d.getHours().toString().length === 1)? "0"+d.getHours() : d.getHours(),
+			minute = (d.getMinutes().toString().length === 1)? "0"+d.getMinutes() : d.getMinutes(),
+			second = (d.getSeconds().toString().length === 1)? "0"+d.getSeconds() : d.getSeconds(),
+			datetime = year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second,
+			trackingNo = data.trackingno,
+			subject = data.subject,
+			description = data.desc,
+			type = data.type,
+			office = data.office;
+
+		console.log(action);
+		if(action == "register") {				
+			var insert = ['REGDOC',"{'trackingno':'"+trackingNo+"', 'subject':'"+subject+"', 'description':'"+description+"', 'subject':'"+subject+"', 'type':'"+type+"', 'status':'0', 'lastUpdated':'"+datetime+"', 'empno':'"+empno+"', 'office':'"+office+"', 'logDate':'"+datetime+"'}",datetime];
+			dbh.prepAndExecSql(null, "INSERT INTO queue(request, data, enqueueDate) VALUES (?, ?, ?)", insert,
+				function (succ,params, x){
+					console.log('Insert to queue success!');
+				}, null);
+
+			var insert2 = [trackingNo, subject, description, type, 0, datetime];
+			dbh.prepAndExecSql(null, "INSERT INTO documents(trackingno, subject, description, type, status, lastUpdated) VALUES (?, ?, ?, ?, ?, ?)", insert2,
+				function (succ,params, x){
+					console.log('Insert to documents success!');
+				}, null);
+
+			var insert3 = [empno, trackingNo, datetime, office, 1, datetime];
+			dbh.prepAndExecSql(null, "INSERT INTO locations_log(empno, trackingno, logDate, office, sender, lastUpdated) VALUES (?, ?, ?, ?, ?, ?)", insert3,
+				function (succ,params, x){
+					console.log('Insert to locations_log success!');
+				}, null);
+
+			if (typeof(callback) === "function") callback(trackingNo);
+		}
+		else if(action == "receive") {
+			var insert = ['RECDOC',"{'trackingno':'"+trackingNo+"', 'status':'1', 'lastUpdated':'"+datetime+"', 'empno':'"+empno+"', 'office':'"+office+"', 'logDate':'"+datetime+"', 'sender': '0'}",datetime];
+			dbh.prepAndExecSql(null, "INSERT INTO queue(request, data, enqueueDate) VALUES (?, ?, ?)", insert,
+				function (succ,params, x){
+					console.log('Insert to queue success!');
+				}, null);
+
+			var insert2 = [empno, trackingNo, datetime, office, 0, datetime];
+			dbh.prepAndExecSql(null, "INSERT INTO locations_log(empno, trackingno, logDate, office, sender, lastUpdated) VALUES (?, ?, ?, ?, ?, ?)", insert2,
+				function (succ,params, x){
+					console.log('Insert to locations_log success!');
+				}, null);
+
+			dbh.prepAndExecSql(null, "UPDATE documents SET status = 1, lastUpdated = '"+datetime+"' WHERE trackingno = '"+trackingNo+"'", [],
+				function (succ,params, x){
+					console.log('Update status success!');
+				}, null);
+
+			if (typeof(callback) === "function") callback(trackingNo);
+		}
 	}
 };

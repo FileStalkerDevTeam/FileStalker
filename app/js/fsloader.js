@@ -74,8 +74,6 @@ FSLoader.prototype = {
 				}
 			}
 		}
-
-		console.log(datagrid);
 	},
 	_startLoader : function(){
 		var self = this,
@@ -86,16 +84,6 @@ FSLoader.prototype = {
 				if(action == 1) { if(display) return "zoom-in-out"; else return "zoom-out-in"; }
 				if(action == 2) { if(display) return "zoom-out-out"; else return "zoom-in-in"; }
 			};
-			// getActionColor = function(display) {
-			// 	if(!display) {
-			// 		switch(self._random(9)) {
-			// 			case 1: return "rgb(255,42,42)";
-			// 			case 4: return "rgb(56,231,56)";
-			// 			case 7: return "rgb(83,167,240)";
-			// 			default: return "rgb(255,255,255)";
-			// 		}
-			// 	}
-			// };
 
 		this._loadingInterval = setInterval(function(){
 			if(!self.defines.hidden) {
@@ -113,9 +101,7 @@ FSLoader.prototype = {
 						datagrid[i][j].action = action;
 
 						var actionClass = getActionClass(display, action);
-						// var actionColor = getActionColor(display);
-
-						// if($(cellId).css('background') == "rgb(255,255,255)") $(cellId).css(background, actionColor);
+						
 						$(cellId).addClass(actionClass).css('-webkit-animation-duration', (self._random(self._random(1)+2)+1)+"s");
 
 						$(cellId).off("webkitAnimationEnd").on("webkitAnimationEnd", function(e){
@@ -136,13 +122,13 @@ FSLoader.prototype = {
 			}
 		}, 100);
 	},
-	showLoader : function(){
+	_showLoader : function(){
 		this.defines.hidden = 0;
 		this._startLoader();
-		$('#loadingpane').fadeIn(300).removeClass("hidden");
+		$('#loadingpane').fadeIn(400);
 	},
-	hideLoader : function(){
-		$('#loadingpane').addClass("hidden").fadeOut(400);
+	_hideLoader : function(){
+		$('#loadingpane').fadeOut(400);
 		this.defines.hidden = 1;
 		clearInterval(this.defines._loadingInterval);
 	}

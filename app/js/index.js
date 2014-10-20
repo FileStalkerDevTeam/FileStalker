@@ -5,13 +5,13 @@ var fsp = new FSPages;
 
 _initializeApp = function() {
 	$('#main').hide();
-	fsm._initDatabase();
 	fsl._initLoader();
-	fsl.showLoader();
+	fsl._showLoader();
+	fsm._initDatabase();
 	_initLoginEvents(function(){
 		_initPageEvents(function(){
 			$('#main').fadeIn('fast',function(){
-				fsl.hideLoader();
+				fsl._hideLoader();
 			});
 		});
 	});
@@ -24,7 +24,7 @@ _initLoginEvents = function(callback) {
 				var errornotif = $('#login #loginform #loginnotif');
 				switch(result) {
 					case 0:
-						fsl.showLoader();
+						fsl._showLoader();
 						console.log(success);
 						$('#main').fadeOut('fast', function(){
 							sessionStorage.empno = success.rows[0]['empno'];
@@ -32,7 +32,7 @@ _initLoginEvents = function(callback) {
 		 					sessionStorage.picture = success.rows[0]['picture'];
 	 						_updateHomePage();
 	 						$('#main').addClass('logged-in').fadeIn('fast', function(){
-	 							fsl.hideLoader();
+	 							fsl._hideLoader();
 	 						});
 						});
 						break;
@@ -92,6 +92,8 @@ _initLoginEvents = function(callback) {
 };
 
 _initPageEvents = function(callback) {
+	var self = this;
+
 	var userbutton = $('#userinfo #usermenu, #userinfo #userdrop');
 	userbutton.on('mouseover', function(){
 		$('#userinfo #userdrop').addClass('show');
@@ -101,13 +103,14 @@ _initPageEvents = function(callback) {
 
 	var logoutbutton = $("#logoutlink");
 	logoutbutton.on('click', function() {
-		fsl.showLoader();
+		fsl._showLoader();
 		$('#main').fadeOut('fast', function(){
+			_reset('loginpage');
 			sessionStorage.clear();
 			$('#main').removeClass('logged-in');
 			_initLoginEvents(function(){
 				$('#main').fadeIn('fast',function(){
-					fsl.hideLoader();
+					fsl._hideLoader();
 				});
 			});
 		});
@@ -117,11 +120,16 @@ _initPageEvents = function(callback) {
 	$.each(homeButtons, function(button){
 		$(this).on('click', function(){
 			var target = $(this).data('target');
-			$('#pageoverlay').fadeIn(200);
-			// $('#'+target).show(10, function(){
-			// 	$(this).addClass('open-page');
-			// });
-			$('#'+target).addClass('open-page');
+			if(target == "search") {
+				$('#pageoverlay').fadeIn(300);
+				$('#'+target+"page").show(10, function(){
+					$(this).addClass('open');
+				});
+			}
+			else {
+				$('#pageoverlay').fadeIn(300);
+				self._showMessage("Hi there! Before we continue, please scan first the QR code of your document. Thank you!", target);
+			}
 		}).on('mouseenter', function(){
 			var color = $(this).css('background-color');
 			var wrapper = $(this).parents('.navwrapper')[0];
@@ -135,10 +143,11 @@ _initPageEvents = function(callback) {
 	var pageCloseButtons = $('.page .displaypane .closebutton');
 	$.each(pageCloseButtons, function(button){
 		$(this).on('click', function(){
-			var target = $(this).parents('.page');
-			$('#pageoverlay').fadeOut(200);
-			target.removeClass('open-page');
-			_reset('regrecpage');
+			var target = $(this).parents('.page'),
+				action = target.data('action');
+			$('#pageoverlay').fadeOut(300);
+			target.removeClass('open');
+			_reset(action+"page");
 		});
 	});
 
@@ -148,14 +157,10 @@ _initPageEvents = function(callback) {
 		flap.toggleClass('open');
 	});
 
-	var scanButtons = $('.page .testscanner .scan');
-	$.each(scanButtons, function(button){
-		$(this).on('click', function(){
-			var action = $(this).parents('.page').data('action');
-			var code = $(this).siblings('.qrcode').val();
-
-			_verifyQRCode(code, action);
-		});
+	var messageclose = $('#message .icon');
+	messageclose.on('click', function(){
+		self._hideMessage();
+		$('#pageoverlay').fadeOut(300);
 	});
 
 	callback();
@@ -174,6 +179,55 @@ _updateHomePage = function() {
 	$('#userinfo #userdrop #account #userpic img').attr('src',pic);
 };
 
+_showMessage = function(message, action, autohide){
+	var self = this;
+
+	$('#message .text').text(message)
+
+	if(action == 'register') {
+		$('#message').css('border-bottom','5px solid rgb(17,211,17)');
+		$('#message').data('action', action);
+
+		var tester = "<div class='testscanner'><input type='text' id='regqrcode' class='qrcode' /><button class='scan'>Scan</button></div>";
+		$('#message').append(tester);
+		$('#message .testscanner .scan').on('click', function(){
+			var code = $(this).siblings('.qrcode').val();
+			_verifyQRCode(code, action);
+		});
+	}
+	else if(action == 'receive') {
+		$('#message').css('border-bottom','5px solid rgb(255,42,42)');
+		$('#message').data('action', action);
+
+		var tester = "<div class='testscanner'><input type='text' id='recqrcode' class='qrcode' /><button class='scan'>Scan</button></div>";
+		$('#message').append(tester);
+		$('#message .testscanner .scan').on('click', function(){
+			var code = $(this).siblings('.qrcode').val();
+			_verifyQRCode(code, action);
+		});
+	}
+
+	if(autohide) setTimeout(function(){ self._hideMessage(); }, 4000);
+
+	$('#message').addClass('show');
+};
+
+_changeMessage = function(message, callback){
+	// $('#message .text').text(message).on('change', fsl._hideLoader());
+	$('#message .text').text(message);
+};
+
+_hideMessage = function(){
+	$('#message').removeClass('show').one('webkitTransitionEnd', function(){
+		$('#message .text').text('');
+		$('#message').css('border-bottom','none');
+		if ($('#message').data('action')) {
+			$('#message').removeData('action');
+			$('#message').find('.testscanner').remove();
+		}
+	});
+};
+
 _verifyQRCode = function(code, action) {
 	var self = this,
 		_evaluateQRCode = function(code, action, result, success) {
@@ -185,64 +239,133 @@ _verifyQRCode = function(code, action) {
 				console.log(success);
 			}
 			else if(result == 1) {
-				$('#regpage .displaypane .scanfirst .text').text("It looks like your document is already registered. But if it's a mistake, please try again.");
-				$('#regpage .testscanner .qrcode').val("");
-				console.log(success);
+				$('#message .testscanner .qrcode').val("");
+				self._changeMessage("It looks like your document is already registered. But if it's a mistake, please try again.");
+				// console.log(success);
 			}
 		}
 		else if(action == "receive") {
 			if(result == 0) {
 				console.log('Receive');
 				console.log('Scan document successful');
-				/*update values for displaypane2*/
-				$('#recpage .scanfirst').fadeOut();
+				self._showReceive(success.rows[0]);
 				console.log(success);
 			}
 			else if(result == 1) {
-				$('#recpage .displaypane .scanfirst .text').text("Oh. There seems to be a mistake. Your document is not yet registered. But if you think otherwise, let's try again.");
-				$('#recpage .testscanner .qrcode').val("");
-				console.log(success);
+				$('#message .testscanner .qrcode').val("");
+				self._changeMessage("Oh. There seems to be a mistake. Your document is not yet registered. But if you think otherwise, let's try again.");
+				// console.log(success);
 			}
 		}
-		fsl.hideLoader();
 	};
 
-	fsl.showLoader();
+	// fsl._showLoader();
 	fsm._verifyQRCode(code, action, _evaluateQRCode);
 };
 
 _showRegister = function(code) {
 	var self = this,
 		_updateRegisterPage = function(offices, params) {
-			var code = params.code;
-			var afterscan = $('#regpage .displaypane2 .afterscan .input');
-			var page = fsp.register(code, offices);
+			var code = params.code,
+				afterscan = $('#registerpage .displaypane .displaypane2 .input'),
+				page = fsp.register(code, offices);
+			
 			afterscan.html(page);
-			$('#regpage .scanfirst').fadeOut();
-		};
+
+			var button = $('#registerpage .input .submit-button');
+			button.on('click', function(){
+				var trackingno = $('#registerpage .input .trackingno #input').text();
+				var subject = $('#registerpage .input #subject').val();
+				var desc = $('#registerpage .input #desc').val();
+				var type = $('#registerpage .input #type').val();
+				var office = $('#registerpage .input #office').val();
+
+				if(trackingno && subject && type && office) {
+					fsm._insertToDatabase('register',{trackingno : trackingno, subject : subject, desc : desc, type : type, office : office}, 
+						function(trackingNo){
+							$('#registerpage').removeClass('open').one('webkitTransitionEnd', function(){
+								$('#pageoverlay').fadeOut(300);
+								self._showMessage("Your document with tracking no. "+trackingNo+" is now being stalked!", null, true);
+							});
+						});
+				}
+				else {
+					self._showMessage("Please fill-up the required fields. Thanks!", null, true);
+				}
+			});
+
+			// fsl._hideLoader();
+			self._hideMessage();
+			$('#registerpage').addClass('open');
+		}
 
 	var params = {
 		code : code
 	};
-	fsm._getUserOffices(sessionStorage.getItem('empno'), _updateRegisterPage, params)
+	fsm._getUserOffices(sessionStorage.getItem('empno'), _updateRegisterPage, params);
+};
+
+_showReceive = function(doc) {
+	var self = this,
+		_updateReceivePage = function(offices, params) {
+			var trackingno = params.trackingNo;
+			var subject = params.subject;
+			var desc = params.description;
+			var type = params.type;
+			var afterscan = $('#receivepage .displaypane .displaypane2 .input');
+			var page = fsp.receive(trackingno, subject, desc, type, offices);
+			
+			afterscan.html(page);
+
+			var button = $('#receivepage .input .submit-button');
+			button.on('click', function(){
+				var trackingno = $('#receivepage .input .trackingno #input').text();
+				var subject = $('#receivepage .input .subjectinput').text();
+				var desc = $('#receivepage .input .descinput').text();
+				var type = $('#receivepage .input .typeinput').text();
+				var office = $('#receivepage .input #office').val();
+
+				if(trackingno && subject && type && office) {
+					fsm._insertToDatabase('receive',{trackingno : trackingno, subject : subject, desc : desc, type : type, office : office},
+						function(trackingNo){
+							$('#receivepage').removeClass('open').one('webkitTransitionEnd', function(){
+								$('#pageoverlay').fadeOut(300);
+								self._showMessage("You have successfully received the document with tracking no. "+trackingNo+"!", null, true);
+							});
+						});
+				}
+				else {
+					self._showMessage("Please fill-up the required fields. Thanks!", null, true);
+				}
+			});
+
+			// fsl._hideLoader();
+			self._hideMessage();
+			$('#receivepage').addClass('open');
+		};
+
+	fsm._getUserOffices(sessionStorage.getItem('empno'), _updateReceivePage, doc);
 };
 
 _reset = function(target) {
 	switch(target) {
 		case "loginpage":
+			$('#login #loginform #uname').val("");
+			$('#login #loginform #pword').val("");
 			break;
 		case "registerpage":
-			$('#regpage .scanfirst .text').text("Hi there! Before we continue, please scan first the QR code of your document. Thank you!");
-			$('#regpage .scanfirst').fadeIn();
+			$('#registerpage .displaypane .displaypane2 .scanfirst .text').text("Hi there! Before we continue, please scan first the QR code of your document. Thank you!");
+			$('#registerpage .displaypane .displaypane2 .scanfirst .testscanner .qrcode').val("");
+			$('#registerpage .displaypane .displaypane2 .scanfirst').fadeIn();
+			$('#registerpage .displaypane .displaypane2 .input').html("");
 			break;
 		case "receivepage":
-			break;
-		case "regrecpage":
-			$('.page .scanfirst .text').text("Hi there! Before we continue, please scan first the QR code of your document. Thank you!");
-			$('.page .scanfirst').fadeIn();
-			$('.page .scanfirst .testscanner .qrcode').val("");
+			$('#receivepage .displaypane .displaypane2 .scanfirst .text').text("Hi there! Before we continue, please scan first the QR code of your document. Thank you!");
+			$('#receivepage .displaypane .displaypane2 .scanfirst .testscanner .qrcode').val("");
+			$('#receivepage .displaypane .displaypane2 .scanfirst').fadeIn();
+			$('#receivepage .displaypane .displaypane2 .input').html("");
 			break;
 	}
-}
+};
 
 _initializeApp();
