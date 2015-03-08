@@ -1,23 +1,48 @@
-var body = $('body');
-var fsm = new FSModel;
-var fsl = new FSLoader;
-var fsp = new FSPages;
+'use strict';
+/* global FSModel */
+/* global FSLoader */
+/* global FSPages */
 
-_initializeApp = function() {
-	$('#main').hide();
-	fsl._initLoader();
-	fsl._showLoader();
-	fsm._initDatabase();
-	_initLoginEvents(function(){
-		_initPageEvents(function(){
-			$('#main').fadeIn('fast',function(){
-				fsl._hideLoader();
-			});
-		});
-	});
+var body = $('body');
+var fsm = new FSModel();
+var fsl = new FSLoader();
+var fsp = new FSPages();
+
+var _reset = function(target) {
+	switch(target) {
+		case "loginpage":
+			$('#login #loginform #uname').val("");
+			$('#login #loginform #pword').val("");
+			break;
+		case "registerpage":
+			$('#registerpage .displaypane .displaypane2 .scanfirst .text').text("Hi there! Before we continue, please scan first the QR code of your document. Thank you!");
+			$('#registerpage .displaypane .displaypane2 .scanfirst .testscanner .qrcode').val("");
+			$('#registerpage .displaypane .displaypane2 .scanfirst').fadeIn();
+			$('#registerpage .displaypane .displaypane2 .input').html("");
+			break;
+		case "receivepage":
+			$('#receivepage .displaypane .displaypane2 .scanfirst .text').text("Hi there! Before we continue, please scan first the QR code of your document. Thank you!");
+			$('#receivepage .displaypane .displaypane2 .scanfirst .testscanner .qrcode').val("");
+			$('#receivepage .displaypane .displaypane2 .scanfirst').fadeIn();
+			$('#receivepage .displaypane .displaypane2 .input').html("");
+			break;
+	}
 };
 
-_initLoginEvents = function(callback) {
+var _updateHomePage = function() {
+	var uname = sessionStorage.getItem('name');
+	var empno = sessionStorage.getItem('empno');
+	var pic = sessionStorage.getItem('picture');
+	pic = (pic === "null" || pic === "")? "../img/defaultId.jpg" : pic;
+	console.log("userpic "+pic);
+
+	$('#userinfo .username').text(uname);
+	$('#userinfo #userdrop #account .username').text(uname);
+	$('#userinfo #userdrop #account .userempno').text(empno);
+	$('#userinfo #userdrop #account #userpic img').attr('src',pic);
+};
+
+var _initLoginEvents = function(callback) {
 	if(sessionStorage.getItem('empno') === null) {
 		var loginbutton = $('#login #loginform button'),
 			_evaluateLogin = function(result, success) {
@@ -27,9 +52,9 @@ _initLoginEvents = function(callback) {
 						fsl._showLoader();
 						console.log(success);
 						$('#main').fadeOut('fast', function(){
-							sessionStorage.empno = success.rows[0]['empno'];
-		 					sessionStorage.name = success.rows[0]['name'];
-		 					sessionStorage.picture = success.rows[0]['picture'];
+							sessionStorage.empno = success.rows[0].empno;
+		 					sessionStorage.name = success.rows[0].name;
+		 					sessionStorage.picture = success.rows[0].picture;
 	 						_updateHomePage();
 	 						$('#main').addClass('logged-in').fadeIn('fast', function(){
 	 							fsl._hideLoader();
@@ -68,7 +93,7 @@ _initLoginEvents = function(callback) {
 						}, 3000);
 						break;
 				}
-			}
+			};
 
  		loginbutton.on('click', function(e){
 			var button = this;
@@ -91,7 +116,7 @@ _initLoginEvents = function(callback) {
 	callback();
 };
 
-_initPageEvents = function(callback) {
+var _initPageEvents = function(callback) {
 	var self = this;
 
 	var userbutton = $('#userinfo #usermenu, #userinfo #userdrop');
@@ -120,7 +145,7 @@ _initPageEvents = function(callback) {
 	$.each(homeButtons, function(button){
 		$(this).on('click', function(){
 			var target = $(this).data('target');
-			if(target == "search") {
+			if(target === "search") {
 				$('#pageoverlay').fadeIn(300);
 				$('#'+target+"page").show(10, function(){
 					$(this).addClass('open');
@@ -163,28 +188,58 @@ _initPageEvents = function(callback) {
 		$('#pageoverlay').fadeOut(300);
 	});
 
+	var searchquery = $('#searchinput #query');
+	searchquery.on('keydown', function(){
+		var query = $(this).val();
+		if(query.length >= 3) {
+			console.log("input accepted : "+query);
+		}
+	});
+
 	callback();
 };
 
-_updateHomePage = function() {
-	var uname = sessionStorage.getItem('name');
-	var empno = sessionStorage.getItem('empno');
-	var pic = sessionStorage.getItem('picture');
-	pic = (pic == "null" || pic == "")? "../img/defaultId.jpg" : pic;
-	console.log("userpic "+pic);
+var _verifyQRCode = function(code, action) {
+	var self = this,
+		_evaluateQRCode = function(code, action, result, success) {
+		if(action === "register") {
+			if(result === 0) {
+				console.log('Register');
+				console.log('Scan document successful');
+				self._showRegister(code);
+				console.log(success);
+			}
+			else if(result === 1) {
+				$('#message .testscanner .qrcode').val("");
+				self._changeMessage("It looks like your document is already registered. But if it's a mistake, please try again.");
+				// console.log(success);
+			}
+		}
+		else if(action === "receive") {
+			if(result === 0) {
+				console.log('Receive');
+				console.log('Scan document successful');
+				self._showReceive(success.rows[0]);
+				console.log(success);
+			}
+			else if(result === 1) {
+				$('#message .testscanner .qrcode').val("");
+				self._changeMessage("Oh. There seems to be a mistake. Your document is not yet registered. But if you think otherwise, let's try again.");
+				// console.log(success);
+			}
+		}
+	};
 
-	$('#userinfo .username').text(uname);
-	$('#userinfo #userdrop #account .username').text(uname);
-	$('#userinfo #userdrop #account .userempno').text(empno);
-	$('#userinfo #userdrop #account #userpic img').attr('src',pic);
+	// fsl._showLoader();
+	fsm._verifyQRCode(code, action, _evaluateQRCode);
 };
 
-_showMessage = function(message, action, autohide){
+var _showMessage = function(message, action, autohide){
 	var self = this;
 
-	$('#message .text').text(message)
+	$('#message .text').text(message);
 
-	if(action == 'register') {
+	if(action === 'register') {
 		$('#message').css('border-bottom','5px solid rgb(17,211,17)');
 		$('#message').data('action', action);
 
@@ -195,7 +250,7 @@ _showMessage = function(message, action, autohide){
 			_verifyQRCode(code, action);
 		});
 	}
-	else if(action == 'receive') {
+	else if(action === 'receive') {
 		$('#message').css('border-bottom','5px solid rgb(255,42,42)');
 		$('#message').data('action', action);
 
@@ -212,12 +267,12 @@ _showMessage = function(message, action, autohide){
 	$('#message').addClass('show');
 };
 
-_changeMessage = function(message, callback){
+var _changeMessage = function(message, callback){
 	// $('#message .text').text(message).on('change', fsl._hideLoader());
 	$('#message .text').text(message);
 };
 
-_hideMessage = function(){
+var _hideMessage = function(){
 	$('#message').removeClass('show').one('webkitTransitionEnd', function(){
 		$('#message .text').text('');
 		$('#message').css('border-bottom','none');
@@ -228,42 +283,7 @@ _hideMessage = function(){
 	});
 };
 
-_verifyQRCode = function(code, action) {
-	var self = this,
-		_evaluateQRCode = function(code, action, result, success) {
-		if(action == "register") {
-			if(result == 0) {
-				console.log('Register');
-				console.log('Scan document successful');
-				self._showRegister(code);
-				console.log(success);
-			}
-			else if(result == 1) {
-				$('#message .testscanner .qrcode').val("");
-				self._changeMessage("It looks like your document is already registered. But if it's a mistake, please try again.");
-				// console.log(success);
-			}
-		}
-		else if(action == "receive") {
-			if(result == 0) {
-				console.log('Receive');
-				console.log('Scan document successful');
-				self._showReceive(success.rows[0]);
-				console.log(success);
-			}
-			else if(result == 1) {
-				$('#message .testscanner .qrcode').val("");
-				self._changeMessage("Oh. There seems to be a mistake. Your document is not yet registered. But if you think otherwise, let's try again.");
-				// console.log(success);
-			}
-		}
-	};
-
-	// fsl._showLoader();
-	fsm._verifyQRCode(code, action, _evaluateQRCode);
-};
-
-_showRegister = function(code) {
+var _showRegister = function(code) {
 	var self = this,
 		_updateRegisterPage = function(offices, params) {
 			var code = params.code,
@@ -297,7 +317,7 @@ _showRegister = function(code) {
 			// fsl._hideLoader();
 			self._hideMessage();
 			$('#registerpage').addClass('open');
-		}
+		};
 
 	var params = {
 		code : code
@@ -305,7 +325,7 @@ _showRegister = function(code) {
 	fsm._getUserOffices(sessionStorage.getItem('empno'), _updateRegisterPage, params);
 };
 
-_showReceive = function(doc) {
+var _showReceive = function(doc) {
 	var self = this,
 		_updateReceivePage = function(offices, params) {
 			var trackingno = params.trackingNo;
@@ -347,25 +367,18 @@ _showReceive = function(doc) {
 	fsm._getUserOffices(sessionStorage.getItem('empno'), _updateReceivePage, doc);
 };
 
-_reset = function(target) {
-	switch(target) {
-		case "loginpage":
-			$('#login #loginform #uname').val("");
-			$('#login #loginform #pword').val("");
-			break;
-		case "registerpage":
-			$('#registerpage .displaypane .displaypane2 .scanfirst .text').text("Hi there! Before we continue, please scan first the QR code of your document. Thank you!");
-			$('#registerpage .displaypane .displaypane2 .scanfirst .testscanner .qrcode').val("");
-			$('#registerpage .displaypane .displaypane2 .scanfirst').fadeIn();
-			$('#registerpage .displaypane .displaypane2 .input').html("");
-			break;
-		case "receivepage":
-			$('#receivepage .displaypane .displaypane2 .scanfirst .text').text("Hi there! Before we continue, please scan first the QR code of your document. Thank you!");
-			$('#receivepage .displaypane .displaypane2 .scanfirst .testscanner .qrcode').val("");
-			$('#receivepage .displaypane .displaypane2 .scanfirst').fadeIn();
-			$('#receivepage .displaypane .displaypane2 .input').html("");
-			break;
-	}
+var _initializeApp = function() {
+	$('#main').hide();
+	fsl._initLoader();
+	fsl._showLoader();
+	fsm._initDatabase();
+	_initLoginEvents(function(){
+		_initPageEvents(function(){
+			$('#main').fadeIn('fast',function(){
+				fsl._hideLoader();
+			});
+		});
+	});
 };
 
 _initializeApp();

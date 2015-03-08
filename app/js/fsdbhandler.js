@@ -1,6 +1,8 @@
+'use strict';
+
 function FSDBHandler() {
 	this.defines = {};
-};
+}
 
 FSDBHandler.prototype = {
 	openDatabase : function(dbname,dbversion,dbdesc,dbsize) {

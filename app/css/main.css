@@ -1026,3 +1026,36 @@ body {
 #searchpage .displaypane {
 	background: rgb(83,167,240);
 }
+
+#searchpage .displaypane .displaypane2 #searchinput {
+	width: 40%;
+	height: 100%;
+	border-right: 1px solid gray;
+	float: left;
+	padding: 10px;
+}
+
+#searchpage #searchinput #query {
+	width: calc(100% - 40px);
+	font-family: Roboto-Condensed;
+	font-weight: lighter;
+	font-size: 1.1em;
+	padding: 5px 5px;
+	float: left;
+}
+
+#searchpage #searchinput #search {
+	width: 40px;
+	height: 40px;
+	line-height: 1.1em;
+	font-size: 1.1em;
+	float: right;
+	border: none;
+	background: none;
+}
+
+#searchpage .displaypane .displaypane2 #searchresults {
+	width: 60%;
+	height: 100%;
+	float: right;
+}

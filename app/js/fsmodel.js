@@ -7,20 +7,23 @@
 //  4. retrieve or update row(s) from local database
 //  5. send updates to the remote database if possible (20 queries/5 mins)
 
+'use strict';
+/* global FSDBHandler */
+
 function FSModel() {
 	this.defines = {
 		url : "http://localhost/fs/index.php",
-		update_log : {}
+		updateLog : {}
 	};
-};
+}
 
 FSModel.prototype = {
 	_initDatabase : function(){
-		var dbh = new FSDBHandler;
+		var dbh = new FSDBHandler();
 		var self = this;
 		this.defines.dbh = dbh;
 
-		var update_log = this.defines.update_log;
+		var updateLog = this.defines.updateLog;
 
 		dbh.openDatabase('fsdb_test','1.0','Local database for FileStalker',5*1024*1024);
  		dbh.defines.db.transaction(function(x){
@@ -36,14 +39,14 @@ FSModel.prototype = {
  				// console.log("creating table "+name);
  				dbh.prepAndExecSql(x, value, [],
  					function(success, params, x){
- 						if(self._updateLogs(name, x)){ self._updateTable(name, update_log[name], x); };
+ 						if(self._updateLogs(name, x)){ self._updateTable(name, updateLog[name], x); }
  					}, null);
  			});
  		});
 	},
 	_updateLogs : function(name, x) {
 		var dbh = this.defines.dbh;
-		var update_log = this.defines.update_log;
+		var updateLog = this.defines.updateLog;
 
  		if(name !== 'queue') {
 			dbh.prepAndExecSql(x, "SELECT lastUpdated FROM "+name+" ORDER BY lastUpdated DESC LIMIT 1", [],
@@ -52,13 +55,13 @@ FSModel.prototype = {
 					// console.log(success);
 					if(success.rows.length !== 0) {
 						// console.log("select success");
-						update_log[name] = success.rows[0]["lastUpdated"];
-						// console.log(update_log[name]);
+						updateLog[name] = success.rows[0].lastUpdated;
+						// console.log(updateLog[name]);
 					}
 					else {
 						// console.log("select failed");
-						update_log[name] = '0000-00-00 00:00:00';
-						// console.log(update_log[name]);
+						updateLog[name] = '0000-00-00 00:00:00';
+						// console.log(updateLog[name]);
 					}	 							
 				}, null);
 			return 1;
@@ -93,7 +96,7 @@ FSModel.prototype = {
 			});
 		};
 
-		if(tableName != 'queue') {
+		if(tableName !== 'queue') {
 	 		$.ajax({
 	 			url : self.defines.url + '?func=update',
 	 			data : { tableName : tableName, lastUpdated : lastUpdated },
@@ -113,9 +116,9 @@ FSModel.prototype = {
 							sql = "INSERT INTO documents VALUES (?, ?, ?, ?, ?, ?)";
 							break;
 						case 'locations_log':
-							sql = "INSERT INTO locations_log VALUES (?, ?, ?, ?, ?, ?, ?)"
+							sql = "INSERT INTO locations_log VALUES (?, ?, ?, ?, ?, ?, ?)";
 							break;
-	 				};
+	 				}
 
 	 				inserts = $.makeArray(results.split(";"));
 	 				_insertInto(inserts, sql);
@@ -132,7 +135,7 @@ FSModel.prototype = {
 		dbh.prepAndExecSql(null, "SELECT * FROM staff WHERE name='"+name+"' LIMIT 1",[],
  			function(success,params,x){
  				if(success.rows.length === 1) {
- 					if(password === success.rows[0]['password']) {
+ 					if(password === success.rows[0].password) {
  						callback(0, success);
  					}
  					else{
@@ -151,18 +154,18 @@ FSModel.prototype = {
 		dbh.prepAndExecSql(null, "SELECT * FROM documents WHERE trackingNo='"+code+"'", [],
 			function(success,params,x){
 				if(success.rows.length === 1) {
-					if(action == "register") {
+					if(action === "register") {
 						callback(code, action, 1, success);
 					}
-					else if(action == "receive") {
+					else if(action === "receive") {
 						callback(code, action, 0, success);
 					}
 				}
 				else {
-					if(action == "register") {
+					if(action === "register") {
 						callback(code, action, 0, success);
 					}
-					else if(action == "receive") {
+					else if(action === "receive") {
 						callback(code, action, 1, success);
 					}
 				}
@@ -199,7 +202,7 @@ FSModel.prototype = {
 			office = data.office;
 
 		console.log(action);
-		if(action == "register") {				
+		if(action === "register") {				
 			var insert = ['REGDOC',"{'trackingno':'"+trackingNo+"', 'subject':'"+subject+"', 'description':'"+description+"', 'subject':'"+subject+"', 'type':'"+type+"', 'status':'0', 'lastUpdated':'"+datetime+"', 'empno':'"+empno+"', 'office':'"+office+"', 'logDate':'"+datetime+"'}",datetime];
 			dbh.prepAndExecSql(null, "INSERT INTO queue(request, data, enqueueDate) VALUES (?, ?, ?)", insert,
 				function (succ,params, x){
@@ -220,7 +223,7 @@ FSModel.prototype = {
 
 			if (typeof(callback) === "function") callback(trackingNo);
 		}
-		else if(action == "receive") {
+		else if(action === "receive") {
 			var insert = ['RECDOC',"{'trackingno':'"+trackingNo+"', 'status':'1', 'lastUpdated':'"+datetime+"', 'empno':'"+empno+"', 'office':'"+office+"', 'logDate':'"+datetime+"', 'sender': '0'}",datetime];
 			dbh.prepAndExecSql(null, "INSERT INTO queue(request, data, enqueueDate) VALUES (?, ?, ?)", insert,
 				function (succ,params, x){

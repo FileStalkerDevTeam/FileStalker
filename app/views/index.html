@@ -112,8 +112,14 @@
 					<div id="searchpage" class="page" data-action="search">
 						<div class="displaypane">
 							<div class="displaypane2">
-								<div class="closebutton i-close" data-target="srcpage"></div>
+								<div id="searchinput"/>
+									<input type="text" id="query" name="query"/>
+									<button id="search" class="i-search"></button>
+									<div id="suggestionswrapper"></div>
+								</div>
+								<div id="searchresults"></div>
 							</div>
+							<div class="closebutton i-close" data-target="srcpage"></div>
 						</div>
 					</div>
 				</div>

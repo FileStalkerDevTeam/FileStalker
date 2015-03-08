@@ -1,11 +1,12 @@
+'use strict';
+
 function FSLoader() {
 	this.defines = {
 		gridWidth : 3,
 		cellWidth : 35,
-		hidden : 1,
-		animationAction : "random"
+		hidden : 1
 	};
-};
+}
 
 FSLoader.prototype = {
 	_initLoader : function(){
@@ -47,10 +48,10 @@ FSLoader.prototype = {
 			}
 		}
 
-		this.defines.datagrid = new Array;
+		this.defines.datagrid = [];
 		var datagrid = this.defines.datagrid;
 		for(var i=0; i<width; i++) {
-			datagrid[i] = new Array;
+			datagrid[i] = [];
 		}
 
 		this._initGrid();
@@ -79,10 +80,9 @@ FSLoader.prototype = {
 		var self = this,
 			datagrid = this.defines.datagrid,
 			width = this.defines.gridWidth,
-			animationAction = this.defines.animationAction,
 			getActionClass = function(display, action) {
-				if(action == 1) { if(display) return "zoom-in-out"; else return "zoom-out-in"; }
-				if(action == 2) { if(display) return "zoom-out-out"; else return "zoom-in-in"; }
+				if(action === 1) { if(display) return "zoom-in-out"; else return "zoom-out-in"; }
+				if(action === 2) { if(display) return "zoom-out-out"; else return "zoom-in-in"; }
 			};
 
 		this._loadingInterval = setInterval(function(){
@@ -96,7 +96,7 @@ FSLoader.prototype = {
 
 						var action = self._random(2);
 
-						if(action == 0) continue;
+						if(action === 0) continue;
 
 						datagrid[i][j].action = action;
 
@@ -104,7 +104,7 @@ FSLoader.prototype = {
 						
 						$(cellId).addClass(actionClass).css('-webkit-animation-duration', (self._random(self._random(1)+2)+1)+"s");
 
-						$(cellId).off("webkitAnimationEnd").on("webkitAnimationEnd", function(e){
+						$(cellId).one("webkitAnimationEnd", function(){
 							var row = $(this).data('i'),
 								col = $(this).data('j'),
 								d = datagrid[row][col].display,

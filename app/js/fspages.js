@@ -1,6 +1,8 @@
+'use strict';
+
 function FSPages() {
 	this.defines = {};
-};
+}
 
 FSPages.prototype = {
 	register : function(trackingno, offices) {
@@ -8,7 +10,7 @@ FSPages.prototype = {
 		$.each(offices, function(i, o){
 			office += "<option value='"+o+"'>"+o+"</option>";
 		});
-		var ret = "<div class='title'>Register New Document</div><div class='content'><form action='' method='POST'><div class='trackingno'>Tracking No. <span id='input'>"+trackingno+"</span></div><div class='subjectwrapper'><label for='subject'>Subject <span class='required'>(Required field)</span></label><br/><input type='text' name='subject' id='subject' required/></div><div class='descwrapper'><label for='desc'>Description</label><br/><textarea rows='3' name='desc' id='desc'></textarea></div><div class='typewrapper'><label for='type'>Type <span class='required'>(Required field)</span></label><br/><select name='type' id='type' required><option value='letter'>Letter</option><option value='report'>Report</option><option value='proposal'>Proposal</option><option value='form'>Form</option></select></div><div class='officewrapper'><label for='office'>Office <span class='required'>(Required field)</span></label><br/><select name='office' id='office' required>"+office+"</select></div></form><div class='buttonwrapper'><button class='submit-button'>All set...</button></div></div>"
+		var ret = "<div class='title'>Register New Document</div><div class='content'><form action='' method='POST'><div class='trackingno'>Tracking No. <span id='input'>"+trackingno+"</span></div><div class='subjectwrapper'><label for='subject'>Subject <span class='required'>(Required field)</span></label><br/><input type='text' name='subject' id='subject' required/></div><div class='descwrapper'><label for='desc'>Description</label><br/><textarea rows='3' name='desc' id='desc'></textarea></div><div class='typewrapper'><label for='type'>Type <span class='required'>(Required field)</span></label><br/><select name='type' id='type' required><option value='letter'>Letter</option><option value='report'>Report</option><option value='proposal'>Proposal</option><option value='form'>Form</option></select></div><div class='officewrapper'><label for='office'>Office <span class='required'>(Required field)</span></label><br/><select name='office' id='office' required>"+office+"</select></div></form><div class='buttonwrapper'><button class='submit-button'>All set...</button></div></div>";
 		return ret;
 	},
 
